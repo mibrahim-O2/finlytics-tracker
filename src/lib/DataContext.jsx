@@ -106,10 +106,10 @@ export function DataProvider({ children }) {
   }, [reload]);
 
   // ----- categories -------------------------------------------------------
-  const addCategory = useCallback(async ({ name, icon }) => {
+  const addCategory = useCallback(async ({ name, icon, type }) => {
     const { data, error: e } = await supabase
       .from('categories')
-      .insert({ name: name.trim(), icon })
+      .insert({ name: name.trim(), icon, type: type === 'income' ? 'income' : 'expense' })
       .select()
       .single();
     if (e) return { error: e };
@@ -215,6 +215,15 @@ export function DataProvider({ children }) {
     return m;
   }, [categories]);
 
+  const expenseCategories = useMemo(
+    () => categories.filter((c) => c.type !== 'income'),
+    [categories]
+  );
+  const incomeCategories = useMemo(
+    () => categories.filter((c) => c.type === 'income'),
+    [categories]
+  );
+
   const currentGoal = useMemo(() => {
     const { month, year } = currentMonthKey();
     return goals.find((g) => g.month === month && g.year === year) ?? null;
@@ -226,6 +235,8 @@ export function DataProvider({ children }) {
       transactions,
       goals,
       categoryById,
+      expenseCategories,
+      incomeCategories,
       currentGoal,
       loading,
       error,
@@ -243,6 +254,8 @@ export function DataProvider({ children }) {
       transactions,
       goals,
       categoryById,
+      expenseCategories,
+      incomeCategories,
       currentGoal,
       loading,
       error,

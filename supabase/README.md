@@ -75,6 +75,18 @@ Social, Hoteling, Party & Outings, Bills & Utilities, Others) are **not** seeded
 by SQL — the app inserts them automatically the first time you open it with an
 empty `categories` table.
 
+## Phase 3 follow-up — income vs expense categories
+
+Supabase dashboard → **SQL Editor → New query**. Paste the entire contents of
+[`migrations/0003_category_types.sql`](migrations/0003_category_types.sql) and
+click **Run**.
+
+This adds `categories.type` (`income` / `expense`), tags the existing 8
+categories as `expense`, seeds 5 default income categories (Salary, Family/Gift,
+Savings Withdrawal, Freelance/Personal Work, Other Income), switches the unique
+index to `(user_id, type, lower(name))`, and re-applies the `authenticated`
+grant. Idempotent — safe to re-run.
+
 ## Phase 5 — set a monthly goal for testing (temporary)
 
 The editable goal UI is built in Phase 6. To test the dashboard progress ring

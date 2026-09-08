@@ -11,7 +11,7 @@ const EMPTY = { type: 'expense', amount: '', category_id: '', date: todayISO(), 
  * `onSubmit(payload)` returns { error } | { data }.
  */
 export default function TransactionFormModal({ open, onClose, onSubmit, transaction }) {
-  const { categories } = useData();
+  const { expenseCategories, incomeCategories } = useData();
   const editing = Boolean(transaction);
   const [form, setForm] = useState(EMPTY);
   const [error, setError] = useState('');
@@ -35,6 +35,17 @@ export default function TransactionFormModal({ open, onClose, onSubmit, transact
   }, [open, transaction]);
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  const categoryOptions = form.type === 'income' ? incomeCategories : expenseCategories;
+
+  // Switching type swaps the category list; drop a now-invalid selection.
+  function chooseType(t) {
+    setForm((f) => {
+      const list = t === 'income' ? incomeCategories : expenseCategories;
+      const stillValid = list.some((c) => c.id === f.category_id);
+      return { ...f, type: t, category_id: stillValid ? f.category_id : '' };
+    });
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -75,7 +86,7 @@ export default function TransactionFormModal({ open, onClose, onSubmit, transact
             <button
               key={t}
               type="button"
-              onClick={() => set('type', t)}
+              onClick={() => chooseType(t)}
               className={`btn-pill text-sm capitalize ${
                 form.type === t
                   ? 'bg-accent-green text-bg-base'
@@ -115,7 +126,7 @@ export default function TransactionFormModal({ open, onClose, onSubmit, transact
             className={field}
           >
             <option value="">Uncategorized</option>
-            {categories.map((c) => (
+            {categoryOptions.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>

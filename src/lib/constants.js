@@ -74,9 +74,10 @@ export const DEFAULT_ICON = 'Tag';
 
 /**
  * Default categories created on first run (SPEC §3). Wording is deliberately
- * neutral and respectful.
+ * neutral and respectful. Categories are typed so income and expense have
+ * independent lists.
  */
-export const DEFAULT_CATEGORIES = [
+export const DEFAULT_EXPENSE_CATEGORIES = [
   { name: 'Travel', icon: 'Plane' },
   { name: 'Shopping', icon: 'ShoppingBag' },
   { name: 'Family & Relatives', icon: 'Users' },
@@ -85,6 +86,19 @@ export const DEFAULT_CATEGORIES = [
   { name: 'Party & Outings', icon: 'PartyPopper' },
   { name: 'Bills & Utilities', icon: 'ReceiptText' },
   { name: 'Others', icon: 'Tag' },
+];
+
+export const DEFAULT_INCOME_CATEGORIES = [
+  { name: 'Salary', icon: 'Wallet' },
+  { name: 'Family/Gift', icon: 'Gift' },
+  { name: 'Savings Withdrawal', icon: 'PiggyBank' },
+  { name: 'Freelance/Personal Work', icon: 'Briefcase' },
+  { name: 'Other Income', icon: 'Landmark' },
+];
+
+export const DEFAULT_CATEGORIES = [
+  ...DEFAULT_EXPENSE_CATEGORIES.map((c) => ({ ...c, type: 'expense' })),
+  ...DEFAULT_INCOME_CATEGORIES.map((c) => ({ ...c, type: 'income' })),
 ];
 
 export const UNCATEGORIZED = {
