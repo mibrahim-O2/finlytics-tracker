@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: #011613; /* bg-base (DESIGN.md) */
+    color: #ffffff; /* text-primary */
+    font-family: 'General Sans', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600; /* Semibold headings */
+  }
+}
+
+@layer components {
+  /* Glassmorphism card - subtle transparency, soft shadow, rounded corners (DESIGN.md) */
+  .glass-card {
+    @apply rounded-card border border-accent-teal/20 bg-white/5 shadow-lg backdrop-blur-md;
+  }
+
+  /* Pill-shaped primary button */
+  .btn-pill {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-medium transition-colors;
+  }
+}
