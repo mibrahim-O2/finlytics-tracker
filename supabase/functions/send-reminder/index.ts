@@ -119,6 +119,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error(e);
-    return json({ error: String(e?.message ?? e) }, e?.message === 'Unauthorized' ? 401 : 500);
+    const msg = e instanceof Error ? e.message : String(e);
+    return json({ error: msg }, msg === 'Unauthorized' ? 401 : 500);
   }
 });
