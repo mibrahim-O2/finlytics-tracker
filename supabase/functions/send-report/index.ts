@@ -14,6 +14,8 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const user = await getAppUser(admin);
+    // Recipient: explicit override, else the single account's own email.
+    const recipient = Deno.env.get('REPORT_RECIPIENT_EMAIL') || user.email;
 
     // Build the list of (type, year, month) reports to send.
     type Job = { type: 'monthly' | 'annual'; year: number; month?: number };
@@ -77,7 +79,7 @@ Deno.serve(async (req) => {
           : await buildAnnualReport(admin, user.id, job.year);
 
       const mail = renderReportEmail(report);
-      await sendEmail({ to: user.email, ...mail });
+      await sendEmail({ to: recipient, ...mail });
       const wa = await sendWhatsAppText(mail.text).catch(() => ({ skipped: true }));
 
       await admin.from('notification_log').insert({
@@ -89,7 +91,7 @@ Deno.serve(async (req) => {
         detail: wa.skipped ? 'email only' : 'email + whatsapp',
       });
 
-      results.push(`${kind} ${periodKey}: sent to ${user.email}`);
+      results.push(`${kind} ${periodKey}: sent to ${recipient}`);
     }
 
     return json({ message: results.join('; ') });
