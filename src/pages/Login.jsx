@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogIn, Loader2, AlertTriangle } from 'lucide-react';
+import { LogIn, Loader2, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
 
 export default function Login() {
@@ -12,7 +12,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || '/app';
 
   if (!loading && session) {
     return <Navigate to={from} replace />;
@@ -112,6 +112,13 @@ export default function Login() {
         <p className="mt-6 text-center text-xs text-text-primary/40">
           Private single-user app. Public sign-up is disabled.
         </p>
+        <Link
+          to="/"
+          className="mt-4 flex items-center justify-center gap-1 text-xs text-text-primary/50 hover:text-text-primary/80"
+        >
+          <ArrowLeft className="h-3 w-3" />
+          Back to home
+        </Link>
       </motion.div>
     </div>
   );
