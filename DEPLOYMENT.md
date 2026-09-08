@@ -43,9 +43,9 @@ Nothing to do unless you rotated `CRON_SECRET` — then re-run step 5 there.
 
 | # | Action | Expected |
 |---|---|---|
-| D.1 | Visit the Vercel URL logged out | Redirects to `/login`. |
-| D.2 | Hard-refresh `/transactions` (deep link) | Still resolves (no 404) — the SPA rewrite works. |
-| D.3 | Sign in with your account | Lands on the dashboard with your real data. |
+| D.1 | Visit the Vercel URL (`/`) logged out | The landing page renders (hero, features, preview, developer). |
+| D.2 | Hard-refresh `/app/transactions` (deep link) | Logged out → redirects to `/login`; the route resolves (no 404) — the SPA rewrite works. |
+| D.3 | Click "Get started" → "Continue to sign in" → sign in | Lands on `/app` with your real data. |
 | D.4 | Add a transaction | Persists; reload the page — still there (talking to Supabase from prod). |
 | D.5 | Reports → "Email me this report" | Email arrives (Edge Function reachable from prod). |
 | D.6 | Open DevTools console | No CORS errors, no failed Supabase calls. |
