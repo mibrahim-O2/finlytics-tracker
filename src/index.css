@@ -29,6 +29,24 @@
   h4 {
     font-weight: 600; /* Semibold headings */
   }
+
+  /*
+   * Native <select> dropdowns: the open option list is painted by the OS and
+   * ignores the trigger's Tailwind classes, so without this the options render
+   * as (near-)white text on a white popup. Pin both explicitly to the dark
+   * theme. `select` itself keeps a dark background for the closed control on
+   * platforms that colour it from these rules.
+   */
+  select {
+    color: #ffffff;
+    background-color: #011613; /* bg-base */
+  }
+
+  select option,
+  select optgroup {
+    background-color: #011613; /* bg-base */
+    color: #ffffff; /* text-primary */
+  }
 }
 
 @layer components {
