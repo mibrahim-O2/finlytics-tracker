@@ -7,6 +7,7 @@ import SpendingTrendChart from '../components/SpendingTrendChart';
 import CategoryBreakdownChart from '../components/CategoryBreakdownChart';
 import RecentTransactions from '../components/RecentTransactions';
 import QuickAddTransaction from '../components/QuickAddTransaction';
+import DailyNudge from '../components/DailyNudge';
 import { LoadingBlock, ErrorBanner } from '../components/StateBlocks';
 import {
   formatPKR,
@@ -70,6 +71,8 @@ export default function Dashboard() {
         <LoadingBlock label="Loading your dashboard…" />
       ) : (
         <>
+          <DailyNudge />
+
           {/* top row: goal ring + month stats */}
           <div className="grid gap-4 lg:grid-cols-3">
             <div className="glass-card flex items-center justify-center p-6">
