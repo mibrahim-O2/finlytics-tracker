@@ -87,6 +87,20 @@ Savings Withdrawal, Freelance/Personal Work, Other Income), switches the unique
 index to `(user_id, type, lower(name))`, and re-applies the `authenticated`
 grant. Idempotent — safe to re-run.
 
+## Phase 6 — reminder snooze
+
+Run [`migrations/0004_reminder_snooze.sql`](migrations/0004_reminder_snooze.sql)
+in the SQL Editor. Adds `notification_settings.snooze_until` for the "remind me
+later" feature. The app auto-creates the single `notification_settings` row on
+first load.
+
+## Phase 7 — notifications & email delivery
+
+1. Run [`migrations/0005_notifications.sql`](migrations/0005_notifications.sql)
+   (creates `notification_log`, enables `pg_cron` + `pg_net`).
+2. Deploy the Edge Functions and schedule the jobs — full steps in
+   [`DEPLOY.md`](DEPLOY.md). Requires a free Resend account.
+
 ## Phase 5 — set a monthly goal for testing (temporary)
 
 The editable goal UI is built in Phase 6. To test the dashboard progress ring
