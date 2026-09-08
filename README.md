@@ -42,6 +42,13 @@ Single-user app — no sign-up screen. Create the one account and disable public
 sign-up by following [`supabase/README.md`](supabase/README.md). All app routes
 are protected; logged-out visitors are redirected to `/login`.
 
+## Routes
+
+- `/` — public marketing landing page
+- `/login` — sign in (single account; no public sign-up)
+- `/app`, `/app/transactions`, `/app/categories`, `/app/goals`, `/app/reports`,
+  `/app/settings` — the authenticated app
+
 ## Project structure
 
 ```
