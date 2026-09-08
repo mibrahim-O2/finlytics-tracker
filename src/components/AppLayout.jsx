@@ -11,12 +11,12 @@ import {
 import { useAuth } from '../lib/AuthContext';
 
 const NAV = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/transactions', label: 'Transactions', icon: ArrowLeftRight },
-  { to: '/categories', label: 'Categories', icon: Tags },
-  { to: '/goals', label: 'Goals', icon: Target },
-  { to: '/reports', label: 'Reports', icon: FileBarChart },
-  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/app', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/app/transactions', label: 'Transactions', icon: ArrowLeftRight },
+  { to: '/app/categories', label: 'Categories', icon: Tags },
+  { to: '/app/goals', label: 'Goals', icon: Target },
+  { to: '/app/reports', label: 'Reports', icon: FileBarChart },
+  { to: '/app/settings', label: 'Settings', icon: Settings },
 ];
 
 export default function AppLayout() {
@@ -32,9 +32,9 @@ export default function AppLayout() {
     <div className="min-h-full">
       <header className="border-b border-accent-teal/20">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <span className="text-lg font-semibold tracking-tight">
+          <NavLink to="/app" end className="text-lg font-semibold tracking-tight">
             Fin<span className="text-accent-green">lytics</span>
-          </span>
+          </NavLink>
           <div className="flex items-center gap-3">
             {user?.email && (
               <span className="hidden text-sm text-text-primary/50 sm:inline">
