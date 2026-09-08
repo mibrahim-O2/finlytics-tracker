@@ -61,4 +61,9 @@ supabase/
 Delivery follows the phased plan in `ARCHITECTURE.md` (Phase 0 analysis →
 Phases 1–7 features → Phase 8 deployment). Completed so far: **Phase 1** (setup),
 **Phase 2** (auth), **Phase 3** (schema & category management), **Phase 4**
-(transaction management), **Phase 5** (dashboard & visualizations).
+(transaction management), **Phase 5** (dashboard & visualizations), **Phase 6**
+(goals, reminders & motivation), **Phase 7** (reports & email delivery).
+
+Notification delivery (Resend email + scheduling) is set up separately — see
+[`supabase/DEPLOY.md`](supabase/DEPLOY.md). Deployment to Vercel — see
+[`DEPLOYMENT.md`](DEPLOYMENT.md).
