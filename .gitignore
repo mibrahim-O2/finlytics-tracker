@@ -31,3 +31,5 @@ Thumbs.db
 # Supabase local
 supabase/.temp
 supabase/.branches
+supabase/functions/.env
+!supabase/functions/.env.example
