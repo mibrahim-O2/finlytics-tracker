@@ -52,6 +52,44 @@ auth user — a database-level backstop to step B.
 > first "Add user" will also be blocked (the trigger fires when
 > `count(*) >= 1`, so zero existing users is fine — but do step C first to be safe).
 
+## Phase 3 — Core schema
+
+Supabase dashboard → **SQL Editor → New query**. Paste the entire contents of
+[`migrations/0002_core_schema.sql`](migrations/0002_core_schema.sql) and click
+**Run**.
+
+This creates `categories`, `transactions`, `goals`, and `notification_settings`,
+enables Row-Level Security on all four (scoped to `auth.uid()`), and adds the
+`updated_at` triggers. Run it once; it is safe to re-run (`if not exists` /
+`drop policy if exists` throughout).
+
+The **default categories** (Travel, Shopping, Family & Relatives, Friends &
+Social, Hoteling, Party & Outings, Bills & Utilities, Others) are **not** seeded
+by SQL — the app inserts them automatically the first time you open it with an
+empty `categories` table.
+
+## Phase 5 — set a monthly goal for testing (temporary)
+
+The editable goal UI is built in Phase 6. To test the dashboard progress ring
+before then, insert a goal row for the current month via **SQL Editor**:
+
+```sql
+-- Single-user app, so "the one account" = the only row in auth.users.
+insert into public.goals (user_id, month, year, min_amount, max_amount)
+values (
+  (select id from auth.users order by created_at limit 1),
+  extract(month from now())::int,
+  extract(year from now())::int,
+  5000, 10000
+)
+on conflict (user_id, year, month)
+do update set min_amount = excluded.min_amount, max_amount = excluded.max_amount;
+```
+
+Adjust `5000` / `10000` to change where the 70% (amber) and 100% (red) zone
+thresholds fall. The SQL editor runs as an admin role (RLS is bypassed there),
+so this insert works even though `auth.uid()` is null in that context.
+
 ## Verifying (matches the Phase 2 manual test steps)
 
 - Logged out, visiting any app URL redirects to `/login`.

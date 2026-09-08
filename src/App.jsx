@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import ProtectedRoute from './components/ProtectedRoute';
+import { DataProvider } from './lib/DataContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
@@ -17,7 +18,9 @@ export default function App() {
       <Route
         element={
           <ProtectedRoute>
-            <AppLayout />
+            <DataProvider>
+              <AppLayout />
+            </DataProvider>
           </ProtectedRoute>
         }
       >

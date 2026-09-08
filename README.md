@@ -59,5 +59,6 @@ supabase/
 ## Build phases
 
 Delivery follows the phased plan in `ARCHITECTURE.md` (Phase 0 analysis →
-Phases 1–7 features → Phase 8 deployment). Completed so far: **Phase 1 — Project
-Setup & Core Structure**, **Phase 2 — Authentication**.
+Phases 1–7 features → Phase 8 deployment). Completed so far: **Phase 1** (setup),
+**Phase 2** (auth), **Phase 3** (schema & category management), **Phase 4**
+(transaction management), **Phase 5** (dashboard & visualizations).
