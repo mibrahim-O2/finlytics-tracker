@@ -49,6 +49,14 @@ supabase secrets set ^
   WHATSAPP_ENABLED=false
 ```
 
+`REPORT_RECIPIENT_EMAIL` is **optional** — if unset, reminders and reports go to
+the signed-in account's own email (the normal case). Set it only to send
+elsewhere:
+
+```bash
+supabase secrets set REPORT_RECIPIENT_EMAIL=you@example.com
+```
+
 (`^` is the Windows line-continuation character in `cmd`. In PowerShell use a
 backtick `` ` `` or just put it all on one line.)
 
