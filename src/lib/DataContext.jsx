@@ -39,6 +39,7 @@ export function DataProvider({ children }) {
   const [categories, setCategories] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [goals, setGoals] = useState([]);
+  const [notificationSettings, setNotificationSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -74,13 +75,14 @@ export function DataProvider({ children }) {
     setLoading(true);
     setError(null);
 
-    const [catRes, txRes, goalRes] = await Promise.all([
+    const [catRes, txRes, goalRes, nsRes] = await Promise.all([
       supabase.from('categories').select('*'),
       supabase.from('transactions').select('*').order('date', { ascending: false }),
       supabase.from('goals').select('*'),
+      supabase.from('notification_settings').select('*').maybeSingle(),
     ]);
 
-    const firstErr = catRes.error || txRes.error || goalRes.error;
+    const firstErr = catRes.error || txRes.error || goalRes.error || nsRes.error;
     if (firstErr) setError(firstErr);
 
     let cats = catRes.data ?? [];
@@ -88,9 +90,21 @@ export function DataProvider({ children }) {
       cats = await seedDefaultCategories(session.user.id);
     }
 
+    // Ensure exactly one notification_settings row exists (defaults from the schema).
+    let ns = nsRes.data;
+    if (!nsRes.error && !ns) {
+      const { data: created } = await supabase
+        .from('notification_settings')
+        .insert({})
+        .select()
+        .single();
+      ns = created ?? null;
+    }
+
     setCategories([...cats].sort(byNameAsc));
     setTransactions((txRes.data ?? []).map(normTx));
     setGoals((goalRes.data ?? []).map(normGoal));
+    setNotificationSettings(ns);
     setLoading(false);
   }, [session, seedDefaultCategories]);
 
@@ -190,7 +204,7 @@ export function DataProvider({ children }) {
     return {};
   }, []);
 
-  // ----- goals (write UI arrives in Phase 6; read is used by the dashboard) --
+  // ----- goals ----------------------------------------------------------
   const upsertGoal = useCallback(async ({ month, year, min_amount, max_amount }) => {
     const { data, error: e } = await supabase
       .from('goals')
@@ -207,6 +221,20 @@ export function DataProvider({ children }) {
     });
     return { data };
   }, []);
+
+  // ----- notification settings (Phase 6) -------------------------------
+  const updateNotificationSettings = useCallback(async (patch) => {
+    if (!notificationSettings?.id) return { error: { message: 'Settings not loaded yet.' } };
+    const { data, error: e } = await supabase
+      .from('notification_settings')
+      .update(patch)
+      .eq('id', notificationSettings.id)
+      .select()
+      .single();
+    if (e) return { error: e };
+    setNotificationSettings(data);
+    return { data };
+  }, [notificationSettings]);
 
   // ----- derived --------------------------------------------------------
   const categoryById = useMemo(() => {
@@ -234,6 +262,7 @@ export function DataProvider({ children }) {
       categories,
       transactions,
       goals,
+      notificationSettings,
       categoryById,
       expenseCategories,
       incomeCategories,
@@ -248,11 +277,13 @@ export function DataProvider({ children }) {
       updateTransaction,
       deleteTransaction,
       upsertGoal,
+      updateNotificationSettings,
     }),
     [
       categories,
       transactions,
       goals,
+      notificationSettings,
       categoryById,
       expenseCategories,
       incomeCategories,
@@ -267,6 +298,7 @@ export function DataProvider({ children }) {
       updateTransaction,
       deleteTransaction,
       upsertGoal,
+      updateNotificationSettings,
     ]
   );
 
