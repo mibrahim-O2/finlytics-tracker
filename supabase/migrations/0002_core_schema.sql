@@ -124,3 +124,21 @@ drop trigger if exists trg_notification_settings_updated_at on public.notificati
 create trigger trg_notification_settings_updated_at
   before update on public.notification_settings
   for each row execute function public.set_updated_at();
+
+-- ---------------------------------------------------------------------------
+-- Data API grants
+-- Since 2026-05-30 Supabase no longer auto-grants table privileges to the API
+-- roles on new projects, so RLS alone is not enough — the table privilege must
+-- be granted explicitly or PostgREST returns "permission denied for table".
+-- The RLS policies above still restrict every request to the user's own rows.
+-- Only the `authenticated` role is granted; `anon` is intentionally left with
+-- no access to any Finlytics table (this is a private single-user app).
+-- ---------------------------------------------------------------------------
+grant usage on schema public to authenticated;
+
+grant select, insert, update, delete on
+  public.categories,
+  public.transactions,
+  public.goals,
+  public.notification_settings
+to authenticated;

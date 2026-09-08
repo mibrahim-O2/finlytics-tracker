@@ -59,9 +59,16 @@ Supabase dashboard → **SQL Editor → New query**. Paste the entire contents o
 **Run**.
 
 This creates `categories`, `transactions`, `goals`, and `notification_settings`,
-enables Row-Level Security on all four (scoped to `auth.uid()`), and adds the
-`updated_at` triggers. Run it once; it is safe to re-run (`if not exists` /
+enables Row-Level Security on all four (scoped to `auth.uid()`), adds the
+`updated_at` triggers, and **grants the `authenticated` role table access on
+the Data API**. Run it once; it is safe to re-run (`if not exists` /
 `drop policy if exists` throughout).
+
+> Since 2026-05-30, new Supabase projects no longer auto-grant Data API
+> privileges — without the `grant` statements at the end of the migration,
+> PostgREST returns `permission denied for table categories` even with RLS
+> configured. Every future migration that creates a table must include the
+> equivalent `grant select, insert, update, delete ... to authenticated;`.
 
 The **default categories** (Travel, Shopping, Family & Relatives, Friends &
 Social, Hoteling, Party & Outings, Bills & Utilities, Others) are **not** seeded
