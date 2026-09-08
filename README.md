@@ -36,6 +36,12 @@ Edit `.env` (gitignored — never commit it):
 Resend and WhatsApp variables are documented in `.env.example` and are not
 needed until Phase 7.
 
+### Authentication (Phase 2)
+
+Single-user app — no sign-up screen. Create the one account and disable public
+sign-up by following [`supabase/README.md`](supabase/README.md). All app routes
+are protected; logged-out visitors are redirected to `/login`.
+
 ## Project structure
 
 ```
@@ -53,5 +59,5 @@ supabase/
 ## Build phases
 
 Delivery follows the phased plan in `ARCHITECTURE.md` (Phase 0 analysis →
-Phases 1–7 features → Phase 8 deployment). This commit completes **Phase 1 —
-Project Setup & Core Structure**.
+Phases 1–7 features → Phase 8 deployment). Completed so far: **Phase 1 — Project
+Setup & Core Structure**, **Phase 2 — Authentication**.

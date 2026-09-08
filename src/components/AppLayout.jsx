@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   ArrowLeftRight,
@@ -6,7 +6,9 @@ import {
   Target,
   FileBarChart,
   Settings,
+  LogOut,
 } from 'lucide-react';
+import { useAuth } from '../lib/AuthContext';
 
 const NAV = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -18,6 +20,14 @@ const NAV = [
 ];
 
 export default function AppLayout() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleSignOut() {
+    await signOut();
+    navigate('/login', { replace: true });
+  }
+
   return (
     <div className="min-h-full">
       <header className="border-b border-accent-teal/20">
@@ -25,6 +35,20 @@ export default function AppLayout() {
           <span className="text-lg font-semibold tracking-tight">
             Fin<span className="text-accent-green">lytics</span>
           </span>
+          <div className="flex items-center gap-3">
+            {user?.email && (
+              <span className="hidden text-sm text-text-primary/50 sm:inline">
+                {user.email}
+              </span>
+            )}
+            <button
+              onClick={handleSignOut}
+              className="btn-pill border border-accent-teal/30 text-sm text-text-primary/70 hover:text-text-primary"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
+          </div>
         </div>
         <nav className="mx-auto max-w-5xl px-4 pb-3">
           <ul className="flex flex-wrap gap-1">
