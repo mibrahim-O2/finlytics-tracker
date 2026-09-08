@@ -45,7 +45,12 @@ export function DataProvider({ children }) {
   const seededForUser = useRef(null); // guards against double-seeding (StrictMode)
 
   const seedDefaultCategories = useCallback(async (userId) => {
-    if (seededForUser.current === userId) return [];
+    if (seededForUser.current === userId) {
+      // Another (StrictMode / concurrent) load already triggered seeding —
+      // return whatever is there now rather than an empty list.
+      const { data: existing } = await supabase.from('categories').select('*');
+      return existing ?? [];
+    }
     seededForUser.current = userId;
     const rows = DEFAULT_CATEGORIES.map((c) => ({ ...c }));
     const { data, error: seedErr } = await supabase
