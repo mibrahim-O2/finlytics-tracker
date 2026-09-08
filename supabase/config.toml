@@ -1,0 +1,10 @@
+# Supabase CLI config. `supabase link --project-ref <ref>` fills in project_id.
+project_id = "finlytics-tracker"
+
+[functions.send-report]
+# Auth is checked inside the function (user JWT OR x-cron-secret), so the
+# platform-level JWT gate is disabled.
+verify_jwt = false
+
+[functions.send-reminder]
+verify_jwt = false
