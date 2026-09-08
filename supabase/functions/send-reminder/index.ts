@@ -40,6 +40,7 @@ Deno.serve(async (req) => {
     const manual = caller !== 'cron';
 
     const user = await getAppUser(admin);
+    const recipient = Deno.env.get('REPORT_RECIPIENT_EMAIL') || user.email;
     const { data: ns } = await admin
       .from('notification_settings')
       .select('reminder_time,email_enabled,snooze_until')
@@ -94,7 +95,7 @@ Deno.serve(async (req) => {
       status = 'skipped_logged';
     } else {
       const mail = renderReminderEmail(dailyMessage());
-      await sendEmail({ to: user.email, ...mail });
+      await sendEmail({ to: recipient, ...mail });
       await sendWhatsAppText(mail.text).catch(() => ({ skipped: true }));
     }
 
@@ -115,7 +116,7 @@ Deno.serve(async (req) => {
       message:
         status === 'skipped_logged'
           ? 'Already logged today — reminder skipped.'
-          : `Reminder emailed to ${user.email}.`,
+          : `Reminder emailed to ${recipient}.`,
     });
   } catch (e) {
     console.error(e);
