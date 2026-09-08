@@ -14,7 +14,7 @@ export default function RecentTransactions({ transactions, categoryById, limit =
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-sm font-medium text-text-primary/70">Recent transactions</h2>
         <Link
-          to="/transactions"
+          to="/app/transactions"
           className="inline-flex items-center gap-1 text-xs text-accent-green hover:underline"
         >
           View all <ArrowRight className="h-3 w-3" />
